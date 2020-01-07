@@ -2,8 +2,8 @@
 Import-Module VMware.VimAutomation.Core
 
 #Login variables
-$vcenter = Read-Host -Prompt 'Enter the Horizon Connection Server Name'
-$username = Read-Host -Prompt 'Enter the Username (without the domain name)'
+$vcenter = Read-Host -Prompt 'Enter the vCenter Name'
+$username = Read-Host -Prompt 'Enter the Username'
 $password = Read-Host -Prompt 'Enter the Password' -AsSecureString
 
 # Connect to the VCSA
