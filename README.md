@@ -4,7 +4,7 @@
 - Export-HorPool.ps1 - Export all the VMware Horizon Pools settings to a *.json file.
 - VMinfo.ps1 - Exports all kinds of Virtual Machine information to a CSV file
 
-Feedback
+Feedback:
 Ivo Beerens 
 Email: info@ivobeerens.nl
 Twitter: @ibeerens
