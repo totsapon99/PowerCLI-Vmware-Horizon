@@ -2,7 +2,7 @@
 Import-Module VMware.PowerCLI
 
 # VMware VirtualCenter server name 
-$VCserver = read-host "Enter the vCenter server name"
+$VCserver = Read-Host "Enter the vCenter server name"
 
 # Connect to the vCenter server 
 Connect-VIServer -server $VCserver
