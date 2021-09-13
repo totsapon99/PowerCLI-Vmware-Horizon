@@ -1,0 +1,28 @@
+# VMware Horizon, Push a new image snapshot
+# Secrets are stored in a SecretVault (KeePass)
+# Use PowerCLI 12.0.0 and the HV.Helper Horizon module
+# https://vdc-download.vmware.com/vmwb-repository/dcr-public/2802fdb1-bca3-4875-b76f-901cb15c2b2a/509b4a98-5ee5-4048-9407-28b9f85ba65c/VMware-PowerCLI-12.0.0-15947286.zip
+# https://github.com/vmware/PowerCLI-Example-Scripts/tree/master/Modules/VMware.Hv.Helper
+
+# Variables
+$User = " "
+$GI = " "
+$Domain = " "
+$Server = ""
+$snapshot = " "
+$Pool = " "
+
+# SecretManagement
+Unlock-SecretVault -Name "KeePassVault"
+$Mycred = Get-Secret -Name "Name" -Vault KeePassVault
+$Pass = $mycred.GetNetworkCredential().password
+
+# Connect to Horizon Server
+Get-Module -ListAvailable 'VMware.Hv.Helper' | Import-Module
+VMware.VimAutomation.HorizonView\Connect-HVServer -Server $Server -Domain $Domain -User $User -Password $Pass
+
+# Push Image to Desktop (Instant Clone)
+Start-HVPool -SchedulePushImage -Pool $Pool -LogoffSetting WAIT_FOR_LOGOFF -ParentVM $GI -SnapshotVM $Snapshot 
+
+# Recompose (Composer clone)
+# Start-HVPool -Recompose -Pool $Pool -LogoffSetting FORCE_LOGOFF -ParentVM $Goldenimage -SnapshotVM $Snapshot
