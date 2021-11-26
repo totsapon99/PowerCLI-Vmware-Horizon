@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    This script list the boot device for every VMware ESXi hists
+    This script list the boot device for every VMware ESXi host
 .DESCRIPTION
     VMware is moving away from the support of SD cards and USB drives as boot media.
     ESXi Boot configuration with only SD card or USB drive, without any persistent device, is deprecated with vSphere 7 Update 3. 
@@ -20,21 +20,22 @@ Import-Module VMware.PowerCLI
 
 # Variables
 $datefile = ( get-date ).ToString('yyyy-MM-dd-hhmmss')
-$file = New-Item -type file "C:\Temp\ESXi_bootdevices.csv"
+$file = New-Item -type file "C:\Temp\bootdevices$datefile.csv"
 $vcenterserver = Read-Host "Enter the vCenter server name"
 
 # Connect to the vCenter Server
-Connect-VIServer $vcenterserver
+Connect-VIServer  $vcenterserver
 
 # Get cluster
+# $cluster = Get-Cluster | Select Name
 $cluster = Get-Cluster | Out-GridView -Title "Select the cluster" -OutputMode Single
-$allhosts = Get-Cluster $cluster | Get-VMHost | where {$_.ConnectionState -eq "Connected"}
+$allhosts = $cluster | Get-VMHost | where {$_.ConnectionState -eq "Connected"}
 
 $result = @()
 
 foreach ($allhost in $allhosts) {
     $esxcli = Get-EsxCli -V2 -VMHost $allhost
-    $result += $esxcli.storage.core.device.list.invoke() | Where {$_.IsBootDevice -match "true"} | Select @{N="VMhost";e={$allhost.Name}}, Vendor, Model, IsBootDevice, IsLocal, IsSAS, IsSSD, IsUSB, Device 
+    $result += $esxcli.storage.core.device.list.invoke() | Where {$_.IsBootDevice -match "true"} | Select @{N="Cluster";E={$cluster.Name}},@{N="VMhost";E={$allhost.Name}}, Vendor, Model, IsBootDevice, IsLocal, IsSAS, IsSSD, IsUSB, Device 
 }
 
 # Display the output
