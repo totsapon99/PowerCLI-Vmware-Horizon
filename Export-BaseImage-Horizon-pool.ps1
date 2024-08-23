@@ -6,7 +6,7 @@
 .DESCRIPTION
     Exports BaseImage all the pools on a Horizon Connection Server and saves this in a CSV file
 .NOTES
-    Author(s): Totsapon Ruangsri
+    Author(s): Totsapon
 
     Requirements:  
     Make sure the VMware.HV.Helper module is installed, see: https://github.com/vmware/PowerCLI-Example-Scripts
